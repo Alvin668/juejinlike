@@ -1,19 +1,83 @@
-import { createRouter, createWebHashHistory } from 'vue-router'
+import {
+  createRouter,
+  createWebHashHistory
+} from 'vue-router'
 import Home from '../views/Home.vue'
 
-const routes = [
-  {
+const routes = [{
     path: '/',
     name: 'Home',
     component: Home
   },
   {
-    path: '/about',
-    name: 'About',
-    // route level code-splitting
-    // this generates a separate chunk (about.[hash].js) for this route
-    // which is lazy-loaded when the route is visited.
-    component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+    path: '/:active',
+    name: 'HomeActive',
+    component: Home
+  },
+  {
+    path: '/fire',
+    name: "Fire",
+    component: () => import( /* webpackChunkName: "Fire" */ '../views/Fire.vue')
+  },
+  {
+    path: '/find',
+    name: "Find",
+    component: () => import( /* webpackChunkName: "Fire" */ '../views/Find.vue')
+  },
+  {
+    path: '/course',
+    name: "Course",
+    component: () => import( /* webpackChunkName: "Fire" */ '../views/Course.vue')
+  },
+  {
+    path: '/profile',
+    name: "Profile",
+    component: () => import( /* webpackChunkName: "Fire" */ '../views/Profile.vue')
+  },
+  {
+    path: '/search',
+    name: "Search",
+    component: () => import( /*webpackChunkName:"Search"*/ '../views/Search.vue')
+  },
+  {
+    path: '/checkin',
+    name: "Checkin",
+    component: () => import( /*webpackChunkName:"Search"*/ '../views/CheckIn.vue')
+  },
+  {
+    path: '/luck',
+    name: "Luck",
+    component: () => import( /*webpackChunkName:"Search"*/ '../views/Luck.vue')
+  },
+  {
+    path: '/exchange',
+    name: "Exchange",
+    component: () => import( /*webpackChunkName:"Search"*/ '../views/Exchange.vue')
+  },
+  {
+    path: '/authorlist',
+    name: "AuthorList",
+    component: () => import( /*webpackChunkName:"AuthorList"*/ '../views/AuthorList.vue')
+  },
+  {
+    path: '/authorhome/:id',
+    name: "AuthorHome",
+    component: () => import( /*webpackChunkName:"AuthorHome"*/ '../views/AuthorHome.vue')
+  },
+  {
+    path: '/topic/:active',
+    name: "Topic",
+    component: () => import( /*webpackChunkName:"AuthorHome"*/ '../views/Topic.vue')
+  },
+  {
+    path: '/topicpins/:id',
+    name: "TopicPins",
+    component: () => import( /*webpackChunkName:"AuthorHome"*/ '../views/TopicPins.vue')
+  },
+  {
+    path: '/morereply/:msg_id',
+    name: "AllReply",
+    component: () => import( /*webpackChunkName:"AuthorHome"*/ '../views/AllReply.vue')
   }
 ]
 
