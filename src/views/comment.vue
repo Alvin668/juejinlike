@@ -12,6 +12,7 @@
           {{ publishTime(ctime) }}
         </div>
       </div>
+      <div class="follow" v-if="is_followed">关注</div>
     </div>
     <div class="content">
       <div style="overflow: hidden; line-height: 20px">
@@ -94,6 +95,10 @@ export default {
       type: String,
       default: "",
     },
+    is_followed: {
+      type: Boolean,
+      default: false,
+    },
   },
   components: { Dialog },
   setup(props, ctx) {
@@ -160,6 +165,12 @@ export default {
   & .pub-time {
     margin-left: 15px;
     color: #8a919f;
+  }
+  & .follow {
+    padding: 10px 20px;
+    color: #007fff;
+    background-color: #eaf2ff;
+    margin-left: 10px;
   }
 }
 .content {

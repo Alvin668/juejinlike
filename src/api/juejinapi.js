@@ -126,5 +126,10 @@ export default {
             reply_content,reply_pics,reply_to_comment_id,item_id
         })
     },
+    detail:function(msg_id){
+        return http.post('/juejin/detail',{
+            msg_id
+        })
+    }
 
 }

@@ -43,7 +43,7 @@
                 :sub_content="msg.msg_Info.sub_content"
                 :comment_id="msg.msg_Info.msg_id"
                 :pic_list="msg.msg_Info.pic_list"
-              />
+              />.
               <div class="hot-comment" v-show="msg.hot_comment.comment_info">
                 <div class="hot-title">
                   <svg
@@ -514,7 +514,7 @@ export default {
           item.comment_info.show_content = item.comment_info.sub_content;
         });
         state.replyList = res.data;
-        console.log(state.replyList);
+        // console.log(state.replyList);
       });
     };
 
@@ -566,7 +566,7 @@ export default {
     };
 
     const moreReply = (msg_id) => {
-      console.log(msg_id);
+      // console.log(msg_id);
       router.push(`/morereply/${msg_id}`);
     };
 
