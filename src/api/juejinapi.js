@@ -130,6 +130,11 @@ export default {
         return http.post('/juejin/detail',{
             msg_id
         })
+    },
+    hotComment:function(msg_id){
+        return http.post('/juejin/comment_hots',{
+            msg_id
+        })
     }
 
 }

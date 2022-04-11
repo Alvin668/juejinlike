@@ -13,6 +13,7 @@
         </div>
       </div>
       <div class="follow" v-if="is_followed">关注</div>
+      <!-- <div class="follow" v-else>关注</div> -->
     </div>
     <div class="content">
       <div style="overflow: hidden; line-height: 20px">

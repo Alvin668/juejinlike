@@ -43,7 +43,7 @@
                 :sub_content="msg.msg_Info.sub_content"
                 :comment_id="msg.msg_Info.msg_id"
                 :pic_list="msg.msg_Info.pic_list"
-              />.
+              />
               <div class="hot-comment" v-show="msg.hot_comment.comment_info">
                 <div class="hot-title">
                   <svg

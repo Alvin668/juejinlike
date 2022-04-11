@@ -16,7 +16,7 @@
       :sub_content="pin.msg_Info.sub_content"
       :comment_id="pin.msg_Info.msg_id"
       :pic_list="pin.msg_Info.pic_list"
-      :is_followed="true"
+      :is_followed="pin.user_interact.is_follow"
     />
     <div style="display: flex">
       <div class="belong-topic" v-show="pin.topic.title">
@@ -71,6 +71,78 @@
       </div>
     </div>
   </div>
+  <div class="detail-comment-box">
+    <div class="title">评论</div>
+    <div class="reply-pub">
+      <van-image
+        round
+        width="30px"
+        height="30px"
+        src="https://p9-passport.byteacctimg.com/img/user-avatar/4eb96a510ba31abc55e029bd74da2be0~300x300.image"
+      />
+      <reply :itemId="pin.msg_id" :isShow="true" :msg_id="pin.msg_id" />
+    </div>
+    <div class="title">热门评论<van-icon name="fire-o" color="#ee0a24" /></div>
+    <div class="comment-hot" v-for="hot in hots" :key="hot.comment_id">
+      <comment
+        :avatar_large="hot.user_info.avatar_large"
+        :user_name="hot.user_info.user_name"
+        :job_title="hot.user_info.job_title"
+        :company="hot.user_info.company"
+        :ctime="hot.comment_info.ctime"
+        :origin_content="hot.comment_info.comment_content"
+        :sub_content="hot.comment_info.sub_content"
+        :comment_id="hot.comment_info.item_id"
+        :pic_list="hot.comment_info.comment_pics"
+        :is_followed="false"
+      />
+      <div class="operation">
+        <div class="comment">
+          <van-icon name="chat-o" />
+          {{ hot.comment_info.reply_count }}
+        </div>
+        <div
+          class="digg"
+          :class="{ active: hot.user_interact.is_digg }"
+          @click="digg(hot.msg_id, hot.user_interact.is_digg)"
+        >
+          <van-icon name="good-job-o" />{{ hot.comment_info.digg_count }}
+        </div>
+      </div>
+      <div
+        class="comment-reply"
+        v-for="rep in hot.reply_infos"
+        :key="rep.reply_id"
+      >
+        <comment
+          :avatar_large="rep.user_info.avatar_large"
+          :user_name="rep.user_info.user_name"
+          :job_title="rep.user_info.job_title"
+          :company="rep.user_info.company"
+          :ctime="rep.reply_info.ctime.toString()"
+          :origin_content="rep.reply_info.reply_content"
+          :sub_content="rep.reply_info.reply_content"
+          :comment_id="rep.reply_info.item_id"
+          :pic_list="rep.reply_info.reply_pics"
+          :is_followed="false"
+        />
+        <div class="operation">
+          <div class="comment">
+            <van-icon name="chat-o" />
+            {{ rep.reply_info.burry_count }}
+          </div>
+          <div
+            class="digg"
+            :class="{ active: rep.user_interact.is_digg }"
+            @click="digg(hot.msg_id, rep.user_interact.is_digg)"
+          >
+            <van-icon name="good-job-o" />{{ rep.reply_info.digg_count }}
+          </div>
+          <div></div>
+        </div>
+      </div>
+    </div>
+  </div>
 </template>
 
 <script>
@@ -78,11 +150,12 @@ import comment from "./comment.vue";
 import api from "../api/juejinapi";
 import { useRoute } from "vue-router";
 import { reactive, toRefs } from "@vue/reactivity";
+import Reply from "./Reply.vue";
 export default {
-  components: { comment },
+  components: { comment, Reply },
   setup() {
     const route = useRoute();
-    const state = reactive({ pin: {} });
+    const state = reactive({ pin: {}, hots: [] });
     const onClickLeft = () => {
       history.back();
     };
@@ -132,6 +205,22 @@ export default {
       //   }
     };
 
+    api.hotComment(msg_id).then((res) => {
+      console.log(res.data);
+      state.hots = [];
+      state.hots.push(res.data.shift());
+      state.hots.push(res.data.shift());
+      console.log(state.hots);
+      state.hots.forEach((item) => {
+        item.comment_info.sub_content =
+          item.comment_info.comment_content.substring(0, 80);
+        item.comment_info.comment_content.length >= 80
+          ? (item.comment_info.sub_content += "...")
+          : null;
+        item.comment_info.show_content = item.comment_info.sub_content;
+      });
+    });
+
     return {
       ...toRefs(state),
       onClickLeft,
@@ -142,38 +231,39 @@ export default {
 </script>
 
 <style lang="less">
+.operation {
+  display: flex;
+  color: #8a919f;
+  margin-top: 10px;
+  text-align: center;
+
+  & .share {
+    flex: 1;
+  }
+
+  & .comment {
+    flex: 1;
+  }
+
+  & .comment.active {
+    color: #007fff;
+  }
+
+  & .digg {
+    flex: 1;
+  }
+
+  & .digg.active {
+    color: #007fff;
+  }
+}
+
 .detail-box {
   box-sizing: border-boxs;
   padding: 20px;
   background-color: #fff;
   border-radius: 5px;
   margin-top: 10px;
-  & .operation {
-    display: flex;
-    color: #8a919f;
-    margin-top: 10px;
-    text-align: center;
-
-    & .share {
-      flex: 1;
-    }
-
-    & .comment {
-      flex: 1;
-    }
-
-    & .comment.active {
-      color: #007fff;
-    }
-
-    & .digg {
-      flex: 1;
-    }
-
-    & .digg.active {
-      color: #007fff;
-    }
-  }
 
   & .belong-topic {
     width: fit-content;
@@ -211,6 +301,28 @@ export default {
       color: #8a919f;
       margin-left: 10px;
     }
+  }
+}
+.detail-comment-box {
+  margin-top: 10px;
+  padding: 10px;
+  background-color: #fff;
+  & .title {
+    font-size: 18px;
+    margin-bottom: 20px;
+    margin-top: 20px;
+  }
+  & .reply-pub {
+    display: flex;
+  }
+}
+
+.comment-hot {
+  margin-top: 20px;
+  & .comment-reply {
+    background: rgba(247, 248, 250, 0.7);
+    margin-left: 20px;
+    margin-top: 20px;
   }
 }
 </style>
