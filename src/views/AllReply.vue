@@ -142,6 +142,120 @@
         </div>
       </div>
     </div>
+    <div class="comment-list-comment">
+      <div class="comment-title">
+        <div>全部评论（{{ pin.msg_Info.comment_count }}）</div>
+        <div class="title-right">
+          <span
+            :class="{ active: sort === 0 }"
+            @click="sortComment(0, pin.msg_id)"
+            >最新</span
+          >
+          <span>|</span>
+          <span
+            :class="{ active: sort === 1 }"
+            @click="sortComment(1, pin.msg_id)"
+            >最热</span
+          >
+        </div>
+      </div>
+      <div
+        class="comment-content"
+        v-for="rep in replyList"
+        :key="rep.comment_id"
+      >
+        <comment
+          :avatar_large="rep.user_info.avatar_large"
+          :user_name="rep.user_info.user_name"
+          :job_title="rep.user_info.job_title"
+          :company="rep.user_info.company"
+          :ctime="rep.comment_info.ctime.toString()"
+          :origin_content="rep.comment_info.comment_content"
+          :sub_content="rep.comment_info.sub_content"
+          :comment_id="rep.comment_id"
+          :pic_list="rep.comment_info.comment_pics"
+          :is_author="rep.is_author"
+          :is_current_user="rep.user_info.user_id"
+          @delComment="deleteComment(msg.msg_id)"
+        />
+        <div class="comment-content-opt">
+          <div
+            class="digg"
+            :class="{ active: rep.user_interact.is_digg }"
+            @click="digg(rep.comment_id, rep.user_interact.is_digg)"
+          >
+            <van-icon name="good-job-o" />{{
+              rep.comment_info.digg_count === 0
+                ? "点赞"
+                : rep.comment_info.digg_count
+            }}
+          </div>
+          <div
+            class="comment"
+            @click="
+              replyHandle(rep.comment_id, current_comment === rep.comment_id)
+            "
+            :style="{
+              color:
+                rep.comment_info.reply_count === 0 &&
+                current_comment === rep.comment_id
+                  ? '#007fff'
+                  : '',
+            }"
+          >
+            <van-icon name="chat-o" />{{
+              rep.comment_info.reply_count === 0
+                ? current_comment === rep.comment_id
+                  ? "取消回复"
+                  : "回复"
+                : rep.comment_info.reply_count
+            }}
+          </div>
+        </div>
+        <reply
+          :itemId="rep.comment_id"
+          @published="publishComment"
+          :isShow="current_comment === rep.comment_id"
+          :msg_id="pin.msg_id"
+        />
+        <div
+          class="reply-reply"
+          v-for="rrp in rep.reply_infos"
+          :key="rrp.reply_id"
+        >
+          <comment
+            :avatar_large="rrp.user_info.avatar_large"
+            :user_name="rrp.user_info.user_name"
+            :job_title="rrp.user_info.job_title"
+            :company="rrp.user_info.company"
+            :ctime="rrp.reply_info.ctime.toString()"
+            :origin_content="rrp.reply_info.reply_content"
+            :sub_content="rrp.reply_info.reply_content"
+            :comment_id="rrp.reply_info.reply_id"
+            :pic_list="rrp.reply_info.reply_pics"
+            :is_author="rrp.is_author"
+            :is_current_user="rrp.user_info.user_id"
+            @delComment="deleteComment(msg.msg_id)"
+          />
+          <div class="comment-content-opt">
+            <div class="digg">
+              <van-icon name="good-job-o" />{{
+                rrp.reply_info.digg_count === 0
+                  ? "点赞"
+                  : rrp.reply_info.digg_count
+              }}
+            </div>
+            <div class="comment">
+              <van-icon name="chat-o" />{{
+                rrp.reply_info.burry_count === 0
+                  ? "回复"
+                  : rrp.reply_info.burry_count
+              }}
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -155,7 +269,14 @@ export default {
   components: { comment, Reply },
   setup() {
     const route = useRoute();
-    const state = reactive({ pin: {}, hots: [] });
+    const state = reactive({
+      pin: {},
+      hots: [],
+      sort: 0,
+      current_comment: "",
+      replyList: [],
+      curMsgId: "",
+    });
     const onClickLeft = () => {
       history.back();
     };
@@ -221,10 +342,32 @@ export default {
       });
     });
 
+    const showComment = (msgId, isShow, comment_id) => {
+      state.curMsgId = !isShow ? msgId : "";
+      api.commentList("0", msgId, 4, 20, comment_id).then((res) => {
+        res.data.forEach((item) => {
+          item.comment_info.sub_content =
+            item.comment_info.comment_content.substring(0, 80);
+          item.comment_info.comment_content.length >= 80
+            ? (item.comment_info.sub_content += "...")
+            : null;
+          item.comment_info.show_content = item.comment_info.sub_content;
+        });
+        state.replyList = res.data;
+        // console.log(state.replyList);
+      });
+    };
+    const sortComment = (sort, msgId) => {
+      state.sort = sort;
+      showComment(msgId, false, sort);
+    };
+    showComment(msg_id, false, 0);
     return {
       ...toRefs(state),
       onClickLeft,
       digg,
+      showComment,
+      sortComment,
     };
   },
 };
@@ -323,6 +466,64 @@ export default {
     background: rgba(247, 248, 250, 0.7);
     margin-left: 20px;
     margin-top: 20px;
+  }
+}
+.comment-list-comment {
+  margin-top: 20px;
+
+  & .comment-title {
+    display: flex;
+    margin-bottom: 20px;
+
+    & > div:first-child {
+      flex: 1;
+      font-size: 14px;
+    }
+
+    & .title-right {
+      width: 100px;
+      text-align: center;
+
+      & span {
+        margin-right: 10px;
+      }
+
+      & span.active {
+        color: #1e80ff;
+      }
+    }
+  }
+
+  & .comment-content {
+    border-bottom: 1px solid #e5e5e5;
+    padding: 10px 0;
+
+    &-opt {
+      display: flex;
+      margin-top: -5px;
+      padding-left: 20px;
+
+      & .digg {
+        margin-right: 10px;
+      }
+      & .digg.active {
+        color: #007fff;
+      }
+    }
+
+    & .reply-reply {
+      margin-left: 20px;
+      padding: 10px;
+      background-color: #f7f8fa;
+      border: 1px solid #f7f8fa;
+    }
+  }
+
+  & .reply-more {
+    box-sizing: border-box;
+    width: 100%;
+    text-align: center;
+    padding: 10px;
   }
 }
 </style>
