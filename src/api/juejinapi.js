@@ -84,9 +84,10 @@ export default {
             userId: userId
         });
     },
-    cancelFollow: function (userId) {
+    cancelFollow: function (id,type) {
         return http.post('/juejin/undo', {
-            userId: userId
+            id,
+            type
         });
     },
     listByRec: function () {
@@ -135,6 +136,9 @@ export default {
         return http.post('/juejin/comment_hots',{
             msg_id
         })
+    },
+    myTopics:function(){
+        return http.post('/juejin/mytopics')
     }
 
 }

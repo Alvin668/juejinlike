@@ -159,7 +159,7 @@ export default {
       });
     };
     const cancelFollow = function (userId) {
-      api.cancelFollow(userId).then((res) => {
+      api.cancelFollow(userId, 1).then((res) => {
         const author = state.authorList.filter(
           (item) => item.user_id === userId
         );
