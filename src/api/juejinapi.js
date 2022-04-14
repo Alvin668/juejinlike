@@ -69,14 +69,16 @@ export default {
             cursor: cursor
         })
     },
-    saveDigg: function (itemid,item_type) {
+    saveDigg: function (itemid, item_type) {
         return http.post('/juejin/save_digg', {
-            itemid: itemid,item_type
+            itemid: itemid,
+            item_type
         })
     },
-    cancelDigg: function (itemid,item_type) {
+    cancelDigg: function (itemid, item_type) {
         return http.post('/juejin/cancel_digg', {
-            itemid: itemid,item_type
+            itemid: itemid,
+            item_type
         })
     },
     follow: function (userId) {
@@ -84,7 +86,7 @@ export default {
             userId: userId
         });
     },
-    cancelFollow: function (id,type) {
+    cancelFollow: function (id, type) {
         return http.post('/juejin/undo', {
             id,
             type
@@ -109,36 +111,55 @@ export default {
             sort
         })
     },
-    publish:function(comment_content,comment_pics,item_id){
+    publish: function (comment_content, comment_pics, item_id) {
         return http.post('/juejin/publish', {
-            comment_content,comment_pics,item_id
+            comment_content,
+            comment_pics,
+            item_id
         })
     },
-    profileIdGet:function(){
+    profileIdGet: function () {
         return http.get('/juejin/profile_id');
     },
-    delete:function(comment_id){
-        return http.post('/juejin/delete',{
+    delete: function (comment_id) {
+        return http.post('/juejin/delete', {
             comment_id
         })
     },
-    reply:function(reply_content,reply_pics,reply_to_comment_id,item_id){
+    reply: function (reply_content, reply_pics, reply_to_comment_id, item_id) {
         return http.post('/juejin/reply', {
-            reply_content,reply_pics,reply_to_comment_id,item_id
+            reply_content,
+            reply_pics,
+            reply_to_comment_id,
+            item_id
         })
     },
-    detail:function(msg_id){
-        return http.post('/juejin/detail',{
+    detail: function (msg_id) {
+        return http.post('/juejin/detail', {
             msg_id
         })
     },
-    hotComment:function(msg_id){
-        return http.post('/juejin/comment_hots',{
+    hotComment: function (msg_id) {
+        return http.post('/juejin/comment_hots', {
             msg_id
         })
     },
-    myTopics:function(){
+    myTopics: function () {
         return http.post('/juejin/mytopics')
+    },
+    queryItemCategories: function () {
+        return http.get('/juejin/query_item_categories');
+    },
+    listByRec: function () {
+        return http.post('/juejin/list_by_rec')
+    },
+    listByCateCursor: function (cate_id, cursor, limit) {
+        return http.post('/juejin/list_by_cate_cursor', {
+            cate_id,
+            cursor,
+            limit
+        })
     }
+
 
 }
