@@ -159,6 +159,25 @@ export default {
             cursor,
             limit
         })
+    },
+    listBySearchCursor: function (cursor, keyword, limit) {
+        return http.post('/juejin/list_by_search_cursor', {
+            cursor,
+            keyword,
+            limit
+        })
+    },
+    queryTopicDetail: function (topic_id) {
+        return http.post('/juejin/query_topic_detail', {
+            topic_id
+        })
+    },
+    topic: function (cursor, sort_type, topic_id) {
+        return http.post('/juejin/topic', {
+            cursor,
+            sort_type,
+            topic_id
+        })
     }
 
 

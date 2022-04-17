@@ -11,15 +11,17 @@
         />
         <span>发现更多</span>
       </div>
-      <div
-        class="topic-name"
+      <van-badge
+        :content="item.new_short_msg_count"
+        color="#1989fa"
         v-for="item in topicList"
         :key="item.topic_id"
-        @click="toTopicPins(item.topic_id)"
       >
-        <van-image :src="item.topic.icon" />
-        <span>{{ item.topic.title }}</span>
-      </div>
+        <div class="topic-name" @click="toTopicPins(item.topic_id)">
+          <van-image :src="item.topic.icon" />
+          <span>{{ item.topic.title }}</span>
+        </div>
+      </van-badge>
     </div>
   </div>
   <van-pull-refresh v-model="refreshing" @refresh="onRefresh">
@@ -384,6 +386,7 @@ export default {
 
     const router = useRouter();
     api.listByRec().then((res) => {
+      console.log(res.data);
       state.topicList = res.data;
     });
 

@@ -78,6 +78,16 @@ const routes = [{
     path: '/morereply/:msg_id',
     name: "AllReply",
     component: () => import( /*webpackChunkName:"AuthorHome"*/ '../views/AllReply.vue')
+  },
+  {
+    path: '/topicdetails/:topic_id',
+    name: "TopicDetails",
+    component: () => import( /*webpackChunkName:"AuthorHome"*/ '../views/TopicDetails.vue')
+  },
+  {
+    path: '/topicdetailsmore/:topic_id',
+    name: "TopicDetailsMore",
+    component: () => import( /*webpackChunkName:"AuthorHome"*/ '../views/TopicDetailsMore.vue')
   }
 ]
 
