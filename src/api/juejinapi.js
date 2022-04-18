@@ -178,6 +178,12 @@ export default {
             sort_type,
             topic_id
         })
+    },
+    followerList: function (curosr, topic_id) {
+        return http.post('/juejin/follower_list', {
+            curosr,
+            topic_id
+        });
     }
 
 
