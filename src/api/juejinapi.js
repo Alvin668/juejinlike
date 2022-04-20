@@ -184,6 +184,9 @@ export default {
             curosr,
             topic_id
         });
+    },
+    queryAdverts: function () {
+        return http.post('/juejin/query_adverts');
     }
 
 

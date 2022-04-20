@@ -1,19 +1,12 @@
 <template>
   <div class="find-box">
-    <div class="search-box">
+    <div class="search-box" @click="toSearch">
       <div class="search-input">搜索稀土掘金</div>
     </div>
     <div class="swiper-box">
       <van-swipe :autoplay="3000" lazy-render>
-        <van-swipe-item>
-          <img
-            src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/e18d28aede5d45d3a6d7b14dc0695ff8~tplv-k3u1fbpfcp-no-mark:480:400:0:0.awebp?"
-          />
-        </van-swipe-item>
-        <van-swipe-item>
-          <img
-            src="https://p3-juejin.byteimg.com/tos-cn-i-k3u1fbpfcp/72e2008a238c42afb82842fbc916c23b~tplv-k3u1fbpfcp-no-mark:480:400:0:0.awebp?"
-          />
+        <van-swipe-item v-for="ad in advList" :key="ad.advert_id">
+          <a :href="ad.url"> <img :src="ad.picture" /></a>
         </van-swipe-item>
       </van-swipe>
     </div>
@@ -22,7 +15,7 @@
         <van-icon name="gem-o" size="30px" style="color: gold"></van-icon>
         <span>招聘</span>
       </div>
-      <div class="category-item">
+      <div class="category-item" @click="toTopic">
         <van-icon
           name="comment-circle-o"
           size="30px"
@@ -34,7 +27,7 @@
         <van-icon name="flag-o" size="30px" style="color: gold"></van-icon>
         <span>字学</span>
       </div>
-      <div class="category-item">
+      <div class="category-item" @click="toActivity">
         <van-icon name="bullhorn-o" size="30px" style="color: gold"></van-icon>
         <span>活动</span>
       </div>
@@ -45,7 +38,7 @@
           <span class="title">文章榜</span>
           <span class="sub-title">每日更新</span>
         </div>
-        <div class="bang-img">
+        <div class="bang-img" @click="toArticleList">
           <van-image
             v-for="item in 3"
             :key="item"
@@ -59,11 +52,11 @@
           <span class="title">作者榜</span>
           <span class="sub-title">每日更新</span>
         </div>
-        <div class="bang-img">
+        <div class="bang-img" @click="toAuthorList">
           <van-image
-            v-for="item in 3"
-            :key="item"
-            src="https://p9-passport.byteacctimg.com/img/user-avatar/4eb96a510ba31abc55e029bd74da2be0~300x300.image"
+            v-for="item in authorList"
+            :key="item.user_id"
+            :src="item.avatar_large"
             round
           ></van-image>
         </div>
@@ -72,13 +65,16 @@
     <div class="recommend-box">
       <div class="title-box">
         <span class="title">推荐技术团队</span>
-        <span class="all-team">全部技术团队></span>
+        <span class="all-team" @click="toAuthorList">全部技术团队></span>
       </div>
       <div class="team-box">
-        <div class="team" v-for="item in 8" :key="item">
-          <van-image
-            src="https://p9-passport.byteacctimg.com/img/user-avatar/4eb96a510ba31abc55e029bd74da2be0~300x300.image"
-          ></van-image>
+        <div
+          class="team"
+          v-for="item in teamList"
+          :key="item.user_id"
+          @click="toAuthorHome(item.user_id)"
+        >
+          <van-image :src="item.avatar_large"></van-image>
         </div>
       </div>
     </div>
@@ -86,21 +82,72 @@
       <div class="hot-bang">
         <van-icon name="fire-o" color="#ee0a24" />热门文章
       </div>
-      <!-- <j-list
-        url="/juejin/recommend_cate_feed"
-        :cateId="item.category_id"
-        :limit="20"
-        :sort_type="200"
-      /> -->
+      <j-list url="/juejin/recommend_all_feed" :limit="20" :sort_type="200" />
     </div>
   </div>
 </template>
 
 <script>
+import { reactive, toRefs } from "@vue/reactivity";
+import { useRouter } from "vue-router";
 import JList from "./JList.vue";
+import api from "../api/juejinapi";
 export default {
   components: {
     JList,
+  },
+  setup() {
+    const state = reactive({
+      advList: [],
+      authorList: [],
+      teamList: [],
+    });
+    const router = useRouter();
+    const toSearch = () => {
+      router.push("/search");
+    };
+
+    api.queryAdverts().then((res) => {
+      state.advList = res.data;
+    });
+
+    const toTopic = () => {
+      router.push("/topic");
+    };
+    const toActivity = () => {
+      router.push("/activity");
+    };
+
+    api.recommend(3, "", "0").then((res) => {
+      state.authorList = res.data;
+      console.log(res.data);
+    });
+
+    api.recommend(5, "", "0").then((res) => {
+      state.teamList = res.data;
+      console.log(res.data);
+    });
+
+    const toAuthorList = () => {
+      router.push("/authorlist");
+    };
+
+    const toAuthorHome = (uid) => {
+      router.push(`/authorhome/${uid}`);
+    };
+
+    const toArticleList = () => {
+      router.push("/articlelist");
+    };
+    return {
+      ...toRefs(state),
+      toSearch,
+      toTopic,
+      toActivity,
+      toArticleList,
+      toAuthorList,
+      toAuthorHome,
+    };
   },
 };
 </script>
@@ -196,8 +243,8 @@ export default {
       & .team {
         margin-left: 10px;
         & img {
-          width: 60px;
-          height: 60px;
+          width: 80px;
+          height: 80px;
           border-radius: 5px;
         }
       }
