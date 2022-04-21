@@ -70,6 +70,7 @@ export default {
       onLoad();
     };
     const onLoad = () => {
+      console.log(state.cursor);
       api.queryTopicSquare(state.cursor).then((res) => {
         if (state.refreshing) {
           state.topicList = [];

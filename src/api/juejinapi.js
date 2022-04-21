@@ -188,9 +188,9 @@ export default {
     queryAdverts: function () {
         return http.post('/juejin/query_adverts');
     },
-    queryTopicSquare: function (curosr) {
+    queryTopicSquare: function (cursor) {
         return http.post('/juejin/list_by_hot', {
-            curosr
+            cursor
         });
     }
 
