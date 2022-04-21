@@ -88,6 +88,11 @@ const routes = [{
     path: '/topicdetailsmore/:topic_id',
     name: "TopicDetailsMore",
     component: () => import( /*webpackChunkName:"AuthorHome"*/ '../views/TopicDetailsMore.vue')
+  },
+  {
+    path: '/topicsquare',
+    name: "TopicSquare",
+    component: () => import( /*webpackChunkName:"AuthorHome"*/ '../views/TopicSquare.vue')
   }
 ]
 

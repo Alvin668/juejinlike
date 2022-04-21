@@ -112,7 +112,7 @@ export default {
     });
 
     const toTopic = () => {
-      router.push("/topic");
+      router.push("/topicsquare");
     };
     const toActivity = () => {
       router.push("/activity");
