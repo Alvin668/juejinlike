@@ -70,13 +70,11 @@ export default {
       onLoad();
     };
     const onLoad = () => {
-      console.log(state.cursor);
       api.queryTopicSquare(state.cursor).then((res) => {
         if (state.refreshing) {
           state.topicList = [];
           state.refreshing = false;
         }
-        console.log(res);
         state.cursor = res.cursor;
         state.topicList.push(...res.data);
         state.loading = false;

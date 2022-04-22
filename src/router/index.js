@@ -93,6 +93,11 @@ const routes = [{
     path: '/topicsquare',
     name: "TopicSquare",
     component: () => import( /*webpackChunkName:"AuthorHome"*/ '../views/TopicSquare.vue')
+  },
+  {
+    path: '/activity',
+    name: "Activity",
+    component: () => import( /*webpackChunkName:"AuthorHome"*/ '../views/Activity.vue')
   }
 ]
 

@@ -192,6 +192,15 @@ export default {
         return http.post('/juejin/list_by_hot', {
             cursor
         });
+    },
+    citys: function () {
+        return http.get('/juejin/citys');
+    },
+    eventList: function (cursor, city) {
+        return http.post('/juejin/event_list', {
+            cursor,
+            city
+        });
     }
 
 
