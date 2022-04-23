@@ -201,6 +201,11 @@ export default {
             cursor,
             city
         });
+    },
+    courseList: function (cursor) {
+        return http.post('/juejin/listbycategory', {
+            cursor
+        });
     }
 
 
