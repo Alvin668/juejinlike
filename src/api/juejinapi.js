@@ -206,6 +206,12 @@ export default {
         return http.post('/juejin/listbycategory', {
             cursor
         });
+    },
+    getUserinfo() {
+        return http.get('/juejin/get_user_info');
+    },
+    card() {
+        return http.post('/juejin/card');
     }
 
 
