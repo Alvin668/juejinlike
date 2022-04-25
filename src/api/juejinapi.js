@@ -212,6 +212,9 @@ export default {
     },
     card() {
         return http.post('/juejin/card');
+    },
+    badgeList() {
+        return http.post('/juejin/badgelist');
     }
 
 

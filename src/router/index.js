@@ -98,6 +98,11 @@ const routes = [{
     path: '/activity',
     name: "Activity",
     component: () => import( /*webpackChunkName:"AuthorHome"*/ '../views/Activity.vue')
+  },
+  {
+    path: '/badgewall',
+    name: "BadgeWall",
+    component: () => import( /*webpackChunkName:"AuthorHome"*/ '../views/BadgeWall.vue')
   }
 ]
 

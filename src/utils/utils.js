@@ -27,5 +27,11 @@ export default {
         } else {
             reutrn `${cYears.toFixed(0)}年前`
         }
+    },
+    getLocalDate(ns) {
+        const cdate = new Date(getLocalTime(ns));
+        const month = cdate.getMonth() + 1 < 10 ? `0${cdate.getMonth() + 1}` : cdate.getMonth() + 1;
+        const date = cdate.getDate() < 10 ? `0${cdate.getDate()}` : cdate.getDate();
+        return `${cdate.getFullYear()}-${month}-${cdate.getDate()}`
     }
 }

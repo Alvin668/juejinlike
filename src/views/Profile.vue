@@ -12,7 +12,7 @@
           <span>{{ userInfo.user_name }}</span>
           <img :src="level[userInfo.level]" />
         </div>
-        <div class="tag">
+        <div class="tag" @click="badgeWall">
           {{ userInfo.badges ? userInfo.badges.obtain_count : 0 }} 徽章>
         </div>
       </div>
@@ -113,6 +113,7 @@
 <script>
 import { reactive, toRefs } from "vue";
 import api from "../api/juejinapi";
+import { useRouter } from "vue-router";
 export default {
   name: "",
   props: {},
@@ -153,9 +154,13 @@ export default {
     api.getCount().then((res) => {
       state.days = res.data.cont_count;
     });
-
+    const router = useRouter();
+    const badgeWall = () => {
+      router.push("/badgewall");
+    };
     return {
       ...toRefs(state),
+      badgeWall,
     };
   },
 };
@@ -327,7 +332,10 @@ export default {
 
   & .more-item-box {
     box-sizing: border-box;
-    display: flex;
+    grid-template-columns: repeat(auto-fill, 26.1vw);
+    grid-gap: 1.6vw 0;
+    display: grid;
+    justify-content: space-between;
     flex-wrap: wrap;
     & .more-item {
       width: 80px;
