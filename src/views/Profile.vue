@@ -63,7 +63,7 @@
       <div class="name">福利兑换</div>
     </div>
   </div>
-  <div class="creator-center">
+  <div class="creator-center" @click="toCenter('/creatercenter')">
     <div class="header">
       <span class="title">创作者中心</span>
       <span class="arrow">
@@ -103,7 +103,12 @@
   <div class="more-box">
     <div class="header">更多功能</div>
     <div class="more-item-box">
-      <div class="more-item" v-for="item in tags" :key="item.name">
+      <div
+        class="more-item"
+        v-for="item in tags"
+        :key="item.name"
+        @click="toCenter(item.url)"
+      >
         <van-icon :name="item.icon" size="20" />
         <div class="name">{{ item.name }}</div>
       </div>
@@ -130,7 +135,7 @@ export default {
       },
       tags: [
         { icon: "notes-o", name: "我的课程", url: "" },
-        { icon: "edit", name: "创作者中心", url: "" },
+        { icon: "edit", name: "创作者中心", url: "/creatercenter" },
         { icon: "music-o", name: "我的圈子", url: "" },
         { icon: "todo-list-o", name: "阅读记录", url: "" },
         { icon: "label-o", name: "标签管理", url: "" },
@@ -146,10 +151,18 @@ export default {
       state.userInfo = res.data;
     });
 
-    api.card().then((res) => {
-      state.cardInfo = res.data;
-      console.log(res.data);
-    });
+    api
+      .card([
+        "all_follower",
+        "all_article_display",
+        "all_article_view",
+        "all_article_digg",
+        "all_article_comment",
+        "all_article_collect",
+      ])
+      .then((res) => {
+        state.cardInfo = res.data;
+      });
 
     api.getCount().then((res) => {
       state.days = res.data.cont_count;
@@ -158,9 +171,13 @@ export default {
     const badgeWall = () => {
       router.push("/badgewall");
     };
+    const toCenter = (url) => {
+      router.push(url);
+    };
     return {
       ...toRefs(state),
       badgeWall,
+      toCenter,
     };
   },
 };

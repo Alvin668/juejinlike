@@ -103,6 +103,11 @@ const routes = [{
     path: '/badgewall',
     name: "BadgeWall",
     component: () => import( /*webpackChunkName:"AuthorHome"*/ '../views/BadgeWall.vue')
+  },
+  {
+    path: '/creatercenter',
+    name: "CreaterCenter",
+    component: () => import( /*webpackChunkName:"AuthorHome"*/ '../views/CreaterCenter.vue')
   }
 ]
 

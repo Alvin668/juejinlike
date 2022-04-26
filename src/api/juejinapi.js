@@ -210,12 +210,24 @@ export default {
     getUserinfo() {
         return http.get('/juejin/get_user_info');
     },
-    card() {
-        return http.post('/juejin/card');
+    card(datas) {
+        return http.post('/juejin/card', {
+            datas
+        });
     },
     badgeList() {
         return http.post('/juejin/badgelist');
+    },
+    centerCount() {
+        return http.post('/juejin/centercount');
+    },
+    trend() {
+        return http.post('/juejin/trend');
+    },
+    bannerList() {
+        return http.get('/juejin/banner_list')
     }
+
 
 
 }
