@@ -16,7 +16,7 @@
           {{ userInfo.badges ? userInfo.badges.obtain_count : 0 }} 徽章>
         </div>
       </div>
-      <div class="home-page">个人主页</div>
+      <div class="home-page" @click="toCenter('/profilecenter')">个人主页</div>
     </div>
     <div class="other-info">
       <div>
@@ -172,6 +172,7 @@ export default {
       router.push("/badgewall");
     };
     const toCenter = (url) => {
+      console.log(url);
       router.push(url);
     };
     return {
@@ -182,7 +183,7 @@ export default {
   },
 };
 </script>
-<style lang="less">
+<style lang="less" scoped>
 .tools-box {
   box-sizing: border-box;
   position: fixed;

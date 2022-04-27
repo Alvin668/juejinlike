@@ -188,7 +188,7 @@ export default {
   },
 };
 </script>
-<style lang="less">
+<style lang="less" scoped>
 .box {
   background-color: #fff;
   box-sizing: border-box;

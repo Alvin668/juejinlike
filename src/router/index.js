@@ -30,7 +30,7 @@ const routes = [{
     component: () => import( /* webpackChunkName: "Fire" */ '../views/Course.vue')
   },
   {
-    path: '/profilecenter',
+    path: '/profile',
     name: "Profile",
     component: () => import( /* webpackChunkName: "Fire" */ '../views/Profile.vue')
   },
@@ -108,6 +108,11 @@ const routes = [{
     path: '/creatercenter',
     name: "CreaterCenter",
     component: () => import( /*webpackChunkName:"AuthorHome"*/ '../views/CreaterCenter.vue')
+  },
+  {
+    path: '/profilecenter',
+    name: "ProfileCenter",
+    component: () => import( /*webpackChunkName:"AuthorHome"*/ '../views/ProfileCenter.vue')
   }
 ]
 

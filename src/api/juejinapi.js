@@ -226,6 +226,9 @@ export default {
     },
     bannerList() {
         return http.get('/juejin/banner_list')
+    },
+    dynamic() {
+        return http.get('/juejin/dynamic')
     }
 
 
